@@ -19,5 +19,5 @@ const kConditionTextStyle = TextStyle(
   fontSize: 100.0,
 );
 //Use your own API Key from OpenWeatherMap 😁
-const apiKey = 'e8e3aa0afb1b003642f0f36ec872fd13';
+const apiKey = '';
 const openWeatherMapURL = 'https://api.openweathermap.org/data/2.5/weather';

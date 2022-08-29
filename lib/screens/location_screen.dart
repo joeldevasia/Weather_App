@@ -30,7 +30,7 @@ class _LocationScreenState extends State<LocationScreen> {
     if (weatherData == null) {
       temp = 0;
       id = 0;
-      city = "";
+      city = "Error";
       weatherIcon =
           "https://cdn.pixabay.com/photo/2012/04/14/17/05/warning-34621_960_720.png";
       weatherMessage = "Error: Please enter correct City Name";

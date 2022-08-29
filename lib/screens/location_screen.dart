@@ -7,7 +7,6 @@ class LocationScreen extends StatefulWidget {
   LocationScreen({this.locationWeather});
 
   final locationWeather;
-
   @override
   _LocationScreenState createState() => _LocationScreenState();
 }

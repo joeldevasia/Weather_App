@@ -4,7 +4,7 @@ import 'package:clima/utilities/constants.dart';
 
 class WeatherModel {
   Future<dynamic> getLocationWeather() async {
-    Location location = Location();
+    LocateMe location = LocateMe();
     await location.getCurrentLocation();
     NetworkHelper networkHelper = NetworkHelper(
         "$openWeatherMapURL?lat=${location.latitude}&lon=${location.longitude}&appid=$apiKey&units=metric");

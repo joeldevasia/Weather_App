@@ -9,6 +9,8 @@ class LoadingScreen extends StatefulWidget {
   _LoadingScreenState createState() => _LoadingScreenState();
 }
 
+String baseText = "";
+
 class _LoadingScreenState extends State<LoadingScreen> {
   void getLocation() async {
     var weatherData = await WeatherModel().getLocationWeather();
@@ -23,23 +25,44 @@ class _LoadingScreenState extends State<LoadingScreen> {
   void initState() {
     super.initState();
     getLocation();
+    loadingText();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: SpinKitCubeGrid(
-          color: Colors.white,
-          duration: Duration(milliseconds: 700),
-        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(
+            child: SpinKitCubeGrid(
+              color: Colors.white,
+              duration: Duration(milliseconds: 700),
+            ),
+          ),
+          SizedBox(
+            height: 50,
+          ),
+          Text(baseText)
+        ],
       ),
     );
   }
+
+  void loadingText() async {
+    int counter = 0;
+    baseText = "Fetching current Location";
+    while (true) {
+      await Future.delayed(const Duration(milliseconds: 500));
+      baseText = baseText + ".";
+      if (counter == 3) {
+        counter = 0;
+        baseText = "Fetching current Location";
+      } else {
+        counter++;
+      }
+      setState(() {});
+    }
+    // baseText = "Fetching current Location";
+  }
 }
-// var temp = json['main']['temp'];
-// print("Temperature: $temp");
-// var id = json['weather'][0]['id'];
-// print("Weather No: $id");
-// var city = json['name'];
-// print("City: $city");

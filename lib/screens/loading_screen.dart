@@ -1,6 +1,5 @@
 import 'package:clima/services/weather.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'location_screen.dart';
 
@@ -34,13 +33,13 @@ class _LoadingScreenState extends State<LoadingScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Center(
+          const Center(
             child: SpinKitCubeGrid(
               color: Colors.white,
               duration: Duration(milliseconds: 700),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 50,
           ),
           Text(baseText)
@@ -54,7 +53,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     baseText = "Fetching current Location";
     while (true) {
       await Future.delayed(const Duration(milliseconds: 500));
-      baseText = baseText + ".";
+      baseText = "$baseText.";
       if (counter == 3) {
         counter = 0;
         baseText = "Fetching current Location";
@@ -63,6 +62,5 @@ class _LoadingScreenState extends State<LoadingScreen> {
       }
       setState(() {});
     }
-    // baseText = "Fetching current Location";
   }
 }

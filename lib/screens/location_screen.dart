@@ -3,6 +3,8 @@ import 'package:clima/utilities/constants.dart';
 import 'package:clima/services/weather.dart';
 import 'city_screen.dart';
 
+late int id;
+
 class LocationScreen extends StatefulWidget {
   LocationScreen({this.locationWeather});
 
@@ -13,10 +15,10 @@ class LocationScreen extends StatefulWidget {
 
 class _LocationScreenState extends State<LocationScreen> {
   late int temp;
-  late int id;
   late String city;
   late String weatherIcon;
   late String weatherMessage;
+  late String weatherDescription;
 
   @override
   void initState() {
@@ -29,16 +31,18 @@ class _LocationScreenState extends State<LocationScreen> {
       temp = 0;
       id = 0;
       city = "";
-      weatherIcon = "⚠️";
-      weatherMessage = "Error: Please turn on Location Services";
+      weatherIcon =
+          "https://cdn.pixabay.com/photo/2012/04/14/17/05/warning-34621_960_720.png";
+      weatherMessage = "Error: Please enter correct City Name";
+      weatherDescription = "";
       return;
     }
-
     temp = weatherData['main']['temp'].round();
     id = weatherData['weather'][0]['id'];
     city = weatherData['name'];
     weatherIcon = WeatherModel().getWeatherIcon(id);
     weatherMessage = WeatherModel().getMessage(temp);
+    weatherDescription = WeatherModel().getWeatherDescription(id);
     setState(() {});
   }
 
@@ -47,74 +51,81 @@ class _LocationScreenState extends State<LocationScreen> {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('images/location_background.jpg'),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-                Colors.white.withOpacity(0.8), BlendMode.dstATop),
+          gradient: LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            colors: WeatherModel().getWeatherBackground(id),
           ),
         ),
-        constraints: BoxConstraints.expand(),
+        constraints: const BoxConstraints.expand(),
         child: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  OutlinedButton(
-                    onPressed: () async {
-                      var weatherData =
-                          await WeatherModel().getLocationWeather();
-                      updateUI(weatherData);
-                    },
-                    child: Icon(
-                      Icons.near_me,
-                      size: 50.0,
-                    ),
-                  ),
-                  OutlinedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CityScreen(),
-                          )).then((value) => setState(() {}));
-                    },
-                    style:
-                        ElevatedButton.styleFrom(primary: Colors.transparent),
-                    child: Icon(
-                      Icons.location_city,
-                      size: 50.0,
-                    ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 15.0),
-                child: Row(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
+                    OutlinedButton(
+                      onPressed: () async {
+                        var weatherData =
+                            await WeatherModel().getLocationWeather();
+                        updateUI(weatherData);
+                      },
+                      child: const Icon(
+                        Icons.near_me,
+                        size: 50.0,
+                      ),
+                    ),
+                    OutlinedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CityScreen(),
+                            )).then((value) => setState(() {}));
+                      },
+                      child: const Icon(
+                        Icons.travel_explore,
+                        size: 50.0,
+                      ),
+                    ),
+                  ],
+                ),
+                Center(
+                  child: Text(
+                    city,
+                    style: kDescriptionTextStyle,
+                  ),
+                ),
+                // LoadImage(),
+                Image.network(
+                  weatherIcon,
+                  scale: 0.5,
+                  fit: BoxFit.cover,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
                     Text(
                       '$temp°',
                       style: kTempTextStyle,
                     ),
                     Text(
-                      weatherIcon,
-                      style: kConditionTextStyle,
+                      weatherDescription,
+                      style: kDescriptionTextStyle,
                     ),
                   ],
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(right: 15.0),
-                child: Text(
-                  "$weatherMessage $city!",
-                  textAlign: TextAlign.right,
+                Text(
+                  weatherMessage,
+                  textAlign: TextAlign.center,
                   style: kMessageTextStyle,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
